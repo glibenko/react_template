@@ -6,6 +6,8 @@ This is a template to build a scalable react web application using:
 * Webpack
 * ESlint
 * Babel
+* Jest
+* Enzyme
 
 ### Fast start
 ```sh
@@ -36,4 +38,8 @@ everytime check email:
 $ git config user.email
 $ git config user.email 'example@mail'
 $ git remote -v
+$ git remote set-url
 ```
+
+### TODO
+* redux thunk

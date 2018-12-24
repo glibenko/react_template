@@ -12,8 +12,14 @@ const presets = [
     },
   ],
   '@babel/preset-react',
+  '@babel/preset-flow',
 ];
 
-const plugins = [];
+const plugins = [
+  ['@babel/plugin-proposal-decorators', { legacy: true }],
+  '@babel/plugin-transform-arrow-functions',
+  ['@babel/plugin-proposal-class-properties', { loose: true }],
+  '@babel/plugin-proposal-optional-chaining',
+];
 
 module.exports = { presets, plugins };

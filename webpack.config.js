@@ -44,8 +44,13 @@ module.exports = {
               publicPath: 'css/style.css',
             },
           },
-          'css-loader',
-          'postcss-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              localIdentName: '[path][name]__[local]--[hash:base64:5]',
+            },
+          },
         ],
       },
       {
@@ -76,7 +81,7 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: '[name].[hash].css',
+      filename: '[name].css',
       chunkFilename: '[id].[hash].css',
     }),
   ],
