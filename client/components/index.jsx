@@ -23,6 +23,6 @@ export default class App extends Component {
       >
         hey
       </div>
-    )
+    );
   }
 }
