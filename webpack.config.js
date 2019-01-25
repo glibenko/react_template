@@ -1,23 +1,20 @@
 const path = require('path');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
-const plugins = [];
+console.log('NODE_ENV', NODE_ENV);
 
-if (NODE_ENV === 'production') {
-  plugins.push(
-    new UglifyJSPlugin({
-      uglifyOptions: {
-        beautify: false,
-        ecma: 5,
-        compress: true,
-        comments: false,
-        mangle: false,
-      },
-    })
-  );
-}
+const className = NODE_ENV === 'production' ? '[local]--[hash:base64:5]' : '[path][name]__[local]--[hash:base64:5]';
+
+const MinCss = {
+  loader: MiniCssExtractPlugin.loader,
+  options: {
+    publicPath: '../',
+  },
+};
 
 module.exports = {
   entry: [
@@ -36,21 +33,26 @@ module.exports = {
         loader: 'babel-loader',
       },
       {
-        test: /\.css$/,
+        test: /\.local.css$/,
         use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              publicPath: 'css/style.css',
-            },
-          },
+          MinCss,
           {
             loader: 'css-loader',
             options: {
               modules: true,
-              localIdentName: '[path][name]__[local]--[hash:base64:5]',
+              localIdentName: className,
             },
           },
+          'postcss-loader',
+        ],
+      },
+      {
+        test: /\.css$/,
+        exclude: /\.local.css$/,
+        use: [
+          MinCss,
+          'css-loader',
+          'postcss-loader',
         ],
       },
       {
@@ -59,7 +61,7 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              name: '[path][name]-[hash].[ext]',
+              name: '[name].[ext]',
               outputPath: 'img/',
             },
           },
@@ -71,7 +73,7 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              name: '[path][name]-[hash].[ext]',
+              name: '[name].[ext]',
               outputPath: 'fonts/',
             },
           },
@@ -79,11 +81,33 @@ module.exports = {
       },
     ],
   },
+  optimization: {
+    minimizer: [
+      new UglifyJSPlugin({
+        uglifyOptions: {
+          beautify: false,
+          ecma: 5,
+          compress: {
+            drop_console: true,
+          },
+          comments: false,
+          mangle: false,
+        },
+      }),
+      new OptimizeCSSAssetsPlugin({}),
+    ],
+  },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: '[name].css',
-      chunkFilename: '[id].[hash].css',
+      filename: 'css/[name].css',
     }),
+    new CopyWebpackPlugin([
+      // {from: 'client/icons', to: 'icons'},
+      // {from: 'client/manifest.json'},
+      // {from: 'client/sw.js'},
+      // {from: 'client/index.html'},
+      { from: 'static/reset.css', to: 'css' }
+    ]),
   ],
   resolve: {
     extensions: ['*', '.js', '.jsx'],

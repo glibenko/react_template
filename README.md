@@ -23,8 +23,9 @@ $ npm start
 
 ### Description
 * [npm start] - concurrently run two commands below
-* [npm run build:dev] - webpack --progress
-* [npm run start:dev] -  nodemon --watch ./server/server.js on 4000 port
+* [npm run build:dev] - webpack progress
+* [npm run start:dev] -  start and watch server
+* [npm run prod] -  webpack for production
 
 ### Folder Structure
 * [client] - there are all files which relate to front
