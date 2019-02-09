@@ -8,6 +8,7 @@ This is a template to build a scalable react web application using:
 * Babel
 * Jest
 * Enzyme
+* Flow
 
 ### Fast start
 ```sh
@@ -44,4 +45,3 @@ $ git remote set-url
 
 ### TODO
 * redux thunk
-* flow
